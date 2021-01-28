@@ -10,11 +10,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/main.go",
-            "env": {
-                "DEPLOY": "debug",
-                "kubernetes_CreateNamespaceIfNotPresent": "true",
-                "kubernetes_namespace": "jupynetes"
-            },
+            "envFile": "${workspaceFolder}/.env",
             "args": []
         }
     ]
