@@ -1,48 +1,67 @@
-import { plainToClass } from "class-transformer";
-import { UserInfo } from "../../model/UserInfo";
-
+import { plainToClass } from 'class-transformer';
+import { client } from '../../App';
+import { UserInfo } from '../../model/UserInfo';
+const axios = require('axios').default;
 
 export class UserRepository {
+  provider: UserFakeProvider;
 
-    provider: UserFakeProvider;
+  constructor() {
+    this.provider = new UserFakeProvider();
+  }
 
-    constructor() {
-        this.provider = new UserFakeProvider();
+  async getAdminUser() {
+    let result: string = await this.provider.getAdminUser();
+    let json = JSON.parse(result);
+    let users = plainToClass(UserInfo, json);
+    return users;
+  }
+
+  async getUser() {
+    let result: string = await this.provider.getUser();
+    let json = JSON.parse(result);
+    let users = plainToClass(UserInfo, json);
+    return users;
+  }
+
+  async postUser(password: string, newPasswrod: string) {
+    return true;
+  }
+
+  async postLogin(id: string, password: string) {
+    axios.defaults.withCredentials = true;
+    var response;
+    console.log('id ; ' + id);
+    console.log('password ; ' + password);
+    try {
+      response = await client.post(
+        '/login',
+        {
+          id: id,
+          pw: password,
+        },
+        {
+          withCredentials: true,
+          headers: { crossDomain: true, 'Content-Type': 'application/json' },
+        },
+      );
+    } catch (_) {
+      return;
     }
 
-    async getAdminUser(){
-        let result:string = await this.provider.getAdminUser();
-        let json = JSON.parse(result);
-        let users = plainToClass(UserInfo, json);
-        return users;
-    }
+    return response;
+  }
 
-    async getUser(){
-        let result:string = await this.provider.getUser();
-        let json = JSON.parse(result);
-        let users = plainToClass(UserInfo, json);
-        return users;
-    }
-
-    async postUser(password:string, newPasswrod:string){
-        return true;
-    }
-
-    async postLogin(id:string, password:string){
-        return true;
-    }
-
-    async getLogout(){
-        return true;
-    }
+  async getLogout() {
+    return true;
+  }
 }
 
 class UserFakeProvider {
+  constructor() {}
 
-    constructor(){}
-
-    getAdminUser():string {
-        return `[
+  getAdminUser(): string {
+    return `[
                     {
                         "id": "string",
                         "user_quota": {
@@ -61,10 +80,10 @@ class UserFakeProvider {
                         }
                     }
                 ]`;
-    }
+  }
 
-    getUser():string {
-        return `[
+  getUser(): string {
+    return `[
                     {
                         "id": "string",
                         "user_quota": {
@@ -83,5 +102,5 @@ class UserFakeProvider {
                         }
                     }
                 ]`;
-    }
+  }
 }

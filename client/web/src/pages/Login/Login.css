@@ -1,9 +1,13 @@
-@import '~antd/dist/antd.less';
+/* @import '~antd/dist/antd.less'; */
 
 .Login {
-  text-align: center;
   height: 50vh;
+  text-align: center;
   vertical-align: middle;
+}
+
+.Title {
+  background: greenyellow;
 }
 
 .ant-layout-content {

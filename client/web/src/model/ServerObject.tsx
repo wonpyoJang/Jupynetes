@@ -1,13 +1,12 @@
-
-import assert from "assert";
-import { Flavor } from "./Flavor";
-import { Template } from "./Template";
+import { Flavor } from './Flavor';
+import { Template } from './Template';
 
 export enum ServerStatus {
   ERROR,
   STOPPED,
   INITIALIZING,
-  RUNNING
+  RUNNING,
+  UNKKWON,
 }
 
 var dateFormat = require('dateformat');
@@ -24,73 +23,88 @@ export class ServerObject {
   last_transition_time: string;
   last_probe_time: string;
   owner: string[];
+  isSelected: boolean;
 
   constructor() {
-    this.id = "3";
-    this.name = "sdfdf";
-    this.description = "dfdf";
+    this.id = '3';
+    this.name = 'sdfdf';
+    this.description = 'dfdf';
     this.template = new Template();
     this.flavor = new Flavor();
-    this.created_at = "";
-    this.status = "error";
-    this.message = "dfdf";
-    this.last_transition_time = "";
-    this.last_probe_time = "";
+    this.created_at = '';
+    this.status = 'error';
+    this.message = 'dfdf';
+    this.last_transition_time = '';
+    this.last_probe_time = '';
     this.owner = [];
+    this.isSelected = false;
   }
 
-  getNDaysAgo():string {
-
-    if(this.last_transition_time == null) {
-      return "undefined";
+  getNDaysAgo(): string {
+    if (this.last_transition_time == null) {
+      return 'undefined';
     }
 
-    console.log("last_transition_time: " + this.last_transition_time);
+    console.log('last_transition_time: ' + this.last_transition_time);
 
-    let now:number = Date.now();
-    let lastTransitionTime:number = Date.parse(this.last_transition_time);
-    let diffInMilliSeconds:number = now - lastTransitionTime;
+    let now: number = Date.now();
+    let lastTransitionTime: number = Date.parse(this.last_transition_time);
+    let diffInMilliSeconds: number = now - lastTransitionTime;
     let diffDays = Math.floor(diffInMilliSeconds / 86400000); // days
     let diffHrs = Math.floor((diffInMilliSeconds % 86400000) / 3600000); // hours
-    let diffMins = Math.round(((diffInMilliSeconds % 86400000) % 3600000) / 60000); // m
+    let diffMins = Math.round(
+      ((diffInMilliSeconds % 86400000) % 3600000) / 60000,
+    ); // m
 
-    console.log(diffInMilliSeconds);
-
-    if(diffHrs < 1) {
-      return diffMins + " 분";
+    if (diffHrs < 1) {
+      return diffMins + ' 분';
     } else if (diffDays < 1) {
-      return diffHrs + " 시간";
+      return diffHrs + ' 시간';
     } else {
-      return diffDays + " 일";
+      return diffDays + ' 일';
     }
   }
 
-  getFormattedDate(date:string):string {
-    return dateFormat(date, "yyyy년 mm월 dd일 h시 MM분 ss초");
+  getFormattedDate(date: string): string {
+    return dateFormat(date, 'yyyy년 mm월 dd일 h시 MM분 ss초');
   }
 
-  getFormmatedCreatedAt():string {
+  getFormmatedCreatedAt(): string {
     return this.getFormattedDate(this.created_at);
   }
 
-  getStatus():ServerStatus {
-    switch(this.status) { 
-      case "error": { 
-          return ServerStatus.ERROR;
-      } 
-      case "stopped": { 
-          return ServerStatus.STOPPED; 
+  getStatus(): ServerStatus {
+    switch (this.status) {
+      case 'error': {
+        return ServerStatus.ERROR;
       }
-      case "initializing": {
+      case 'stopped': {
+        return ServerStatus.STOPPED;
+      }
+      case 'initializing': {
         return ServerStatus.INITIALIZING;
       }
-      case "running": {
+      case 'running': {
         return ServerStatus.RUNNING;
       }
       default: {
-        assert(false);
-      } 
-    } 
+        return ServerStatus.UNKKWON;
+      }
+    }
   }
-  
+
+  setSelect(value: boolean) {
+    this.isSelected = value;
+  }
+
+  toggleSelect() {
+    this.setSelect(!this.isSelected);
+  }
+
+  getSelectedStatus() {
+    console.log(
+      ' [ServerObject - getSelectedStatus]   isSelected: ' + this.isSelected,
+    );
+    return this.isSelected;
+  }
 }

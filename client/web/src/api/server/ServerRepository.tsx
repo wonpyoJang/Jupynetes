@@ -1,51 +1,111 @@
-import { plainToClass } from "class-transformer";
-import { ServerResponse } from "http";
-import { ServerObject } from "../../model/ServerObject";
+import { plainToClass } from 'class-transformer';
+import { ServerResponse } from 'http';
+import { client } from '../../App';
+import { ServerObject } from '../../model/ServerObject';
+
+const isTest = false;
+const axios = require('axios').default;
 
 export class ServerRepository {
+  provider: ServerProvider;
 
-    provider: ServerFakeProvider;
+  constructor() {
+    this.provider = new ServerProvider();
+  }
 
-    constructor() {
-        this.provider = new ServerFakeProvider();
+  async getServers() {
+    let result = await this.provider.getServers();
+    if (result === undefined) {
+      return;
+    } else {
+      let servers = plainToClass(ServerObject, result.data as any[]);
+      return servers;
+    }
+  }
+
+  async postServer(serverObject: any) {
+    let result = await this.provider.postServer(serverObject);
+    if (result === undefined) {
+      alert('post server failed');
+      return;
+    } else {
+      let server = plainToClass(ServerObject, result.data);
+      return server;
+    }
+  }
+
+  //   async getServer() {
+  //     let result: any = await this.provider.getServer();
+
+  //     return null;
+  //   }
+
+  async deleteServer(serverObject: ServerObject) {
+    let result: boolean = await this.provider.deleteServer(serverObject);
+    return result;
+  }
+}
+
+class ServerProvider {
+  constructor() {}
+
+  async getServers() {
+    axios.defaults.withCredentials = true;
+    var response;
+    try {
+      response = await client.get('/server', {
+        withCredentials: true,
+        headers: { crossDomain: true, 'Content-Type': 'application/json' },
+      });
+    } catch (_) {
+      alert(_);
+      return;
+    }
+    return response;
+  }
+
+  async postServer(serverObject: any) {
+    axios.defaults.withCredentials = true;
+    var response;
+
+    try {
+      response = await client.post('/server', serverObject, {
+        withCredentials: true,
+        headers: { crossDomain: true, 'Content-Type': 'application/json' },
+      });
+    } catch (_) {
+      alert(_);
+    }
+    if (response === undefined) {
+    } else {
+      alert(response.data);
     }
 
-    async getServers(){
-        let result:string = await this.provider.getServers();
-        console.log("getServers: " + result);
-        let json = JSON.parse(result);
-        console.log("getServers: " + json);
-        let servers = plainToClass(ServerObject, json as any[]);
-        console.log("length of server" + servers.length);
-        return servers;
-    }
+    return response;
+  }
 
-    async postServer(){
-        let result:string = await this.provider.postServer();
-        let json = JSON.parse(result);
-        let servers = plainToClass(ServerObject, json);
-        return servers;
-    }
+  async deleteServer(serverObject: ServerObject) {
+    axios.defaults.withCredentials = true;
+    var response;
 
-    async getServer(){
-        let result:string = await this.provider.getServer();
-        let json = JSON.parse(result);
-        let servers = plainToClass(ServerObject, json);
-        return servers;
+    try {
+      response = await client.delete(`/server/${serverObject.id}`, {
+        withCredentials: true,
+        headers: { crossDomain: true, 'Content-Type': 'application/json' },
+      });
+    } catch (_) {
+      alert('삭제에 실패했습니다.');
+      return false;
     }
-
-    async deleteServer(){
-        let result:boolean = await this.provider.deleteServer();
-        return result;
-    }
+    return true;
+  }
 }
 
 class ServerFakeProvider {
+  constructor() {}
 
-    constructor(){}
-
-    getServers():string {
-        return `[
+  getServers(): any {
+    let data = `[
             {
                 "id": "1",
                 "name": "사과서버",
@@ -109,10 +169,14 @@ class ServerFakeProvider {
                 ]
             }
         ]`;
-    }
 
-    postServer():string {
-        return `{
+    let json = JSON.parse(data);
+    let servers = plainToClass(ServerObject, json);
+    return servers;
+  }
+
+  postServer(): string {
+    return `{
             "id": "string",
             "name": "string",
             "description": "string",
@@ -143,10 +207,10 @@ class ServerFakeProvider {
                 "admin"
             ]
             }`;
-    }
+  }
 
-    getServer():string {
-        return `{
+  getServer(): string {
+    return `{
             "id": "string",
             "name": "string",
             "description": "string",
@@ -177,10 +241,5 @@ class ServerFakeProvider {
                 "admin"
             ]
         }`;
-    }
-
-    deleteServer():boolean {
-        return true;
-    }
-
+  }
 }

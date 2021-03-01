@@ -1,23 +1,43 @@
 import React, { FC } from 'react';
-import { Button } from 'antd';
 import './App.css';
-import Dashboard from "./pages/Dashboard/Components/Dashboard";
+import Dashboard from './pages/Dashboard/Components/Dashboard';
 
-import { createBrowserHistory } from "history";
-import { Router, Route, Switch, Redirect } from "react-router-dom";
+import { createBrowserHistory } from 'history';
+import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import Login from './pages/Login/Login';
+import axios from 'axios';
 
 const hist = createBrowserHistory();
+
+export const client = axios.create({
+  withCredentials: true,
+  timeout: 1000,
+  headers: { 'X-Custom-Header': 'foobar' },
+});
+
+client.interceptors.request.use((request) => {
+  console.log('Starting Request', JSON.stringify(request, null, 2));
+  return request;
+});
+
+client.interceptors.response.use((response) => {
+  console.log('Response:', JSON.stringify(response, null, 2));
+  return response;
+});
 
 const App: FC = () => (
   <div className="App">
     <Router history={hist}>
       <Switch>
-        <Route path="/login"><Login></Login></Route>
-        <Route path="/dashboard"><Dashboard></Dashboard></Route>
+        <Route path="/login">
+          <Login></Login>
+        </Route>
+        <Route path="/dashboard">
+          <Dashboard></Dashboard>
+        </Route>
         <Redirect from="/" to="/login" />
       </Switch>
-    </Router>,
+    </Router>
   </div>
 );
 

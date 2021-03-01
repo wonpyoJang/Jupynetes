@@ -11,6 +11,7 @@
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
     "antd": "^4.9.4",
+    "axios": "^0.21.1",
     "class-transformer": "^0.3.2",
     "dateformat": "^4.4.1",
     "mobx": "^6.0.4",
@@ -24,7 +25,7 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "export HTTPS=true&&SSL_CRT_FILE=cert.pem&&SSL_KEY_FILE=key.pem react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -47,10 +48,22 @@
       "last 1 safari version"
     ]
   },
+  "proxy": "https://jupy.iwanhae.kr/v1",
   "devDependencies": {
+    "@babel/core": "^7.13.8",
+    "@babel/preset-env": "^7.13.8",
+    "@babel/preset-react": "^7.12.13",
     "@types/react-router-dom": "^5.1.7",
+    "css-loader": "^5.0.1",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.1",
-    "prettier": "^2.2.1"
+    "html-webpack-plugin": "^5.2.0",
+    "less": "^4.1.0",
+    "less-loader": "^7.3.0",
+    "prettier": "^2.2.1",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.24.2",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
   }
 }
