@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Typography, Form, Input, Button, Checkbox, Space } from 'antd';
+import { Typography, Form, Input, Button, Space } from 'antd';
 import { useHistory } from 'react-router-dom';
 
 import { UserRepository } from '../../../api/user/UserRepository';
@@ -42,8 +42,18 @@ const LoginForm = (props: any) => {
     let response = await repository.postLogin(userId, password);
     if (response === undefined) {
     } else {
-      alert(response.data.reason);
-      history.push('/dashboard');
+      let userInfo = await repository.getUser();
+      if (userInfo !== undefined) {
+      } else {
+        alert('로그인에 실패했습니다.');
+        return;
+      }
+      console.log('hey');
+      console.log(userInfo);
+      history.push({
+        pathname: '/dashboard',
+        state: { userId: userId },
+      });
     }
   };
 
@@ -54,9 +64,10 @@ const LoginForm = (props: any) => {
   return (
     <>
       <Space align="center">
+        <div></div>
         <div className="loginForm">
           <Space align="start">
-            <Title className="title">Login</Title>
+            <Title className="title">JUPYNETES</Title>
           </Space>
           <div></div>
           <Form
@@ -80,6 +91,7 @@ const LoginForm = (props: any) => {
             >
               <Input
                 className="userNameInput"
+                autoFocus
                 type="text"
                 placeholder="아이디"
                 onChange={changeUserIdHandler}
@@ -110,17 +122,6 @@ const LoginForm = (props: any) => {
                 로그인
               </Button>
             </Form.Item>
-            <Space align="start">
-              <Form.Item
-                className="remeberMe"
-                name="remember"
-                valuePropName="checked"
-              >
-                <Space align="start">
-                  <Checkbox>Remember me</Checkbox>
-                </Space>
-              </Form.Item>
-            </Space>
           </Form>
         </div>
       </Space>

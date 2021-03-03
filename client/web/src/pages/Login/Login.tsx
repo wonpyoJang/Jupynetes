@@ -9,9 +9,9 @@ const { Title } = Typography;
 
 const Login = () => {
   const children = [
-    <Title className="Title">
-      <h1 className="Title">Jupynetes</h1>
-    </Title>,
+    // <Title className="Title">
+    //   <h1 className="Title">Jupynetes</h1>
+    // </Title>,
     <div style={{ height: '3rem' }}></div>,
     <LoginForm />,
   ];
