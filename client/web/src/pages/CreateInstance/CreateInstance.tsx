@@ -92,16 +92,18 @@ const CreateInstance = () => {
 
     let result = await serverRepository.postServer(newServerObject);
 
-    // appState.addServer(new ServerObject());
-    setModalText('The modal will be closed after two seconds');
+    setServerName('');
+    setServerDesc('');
+    setAllocatedCPU(0);
+    setAllocatedGpu(0);
+    setAllocatedMem(0);
     setConfirmLoading(true);
-    setTimeout(() => {
-      setVisible(false);
-      setConfirmLoading(false);
-    }, 2000);
     if (result !== undefined) {
       appState.addServer(result);
     }
+
+    setVisible(false);
+    setConfirmLoading(false);
   };
 
   const handleCancel = () => {
