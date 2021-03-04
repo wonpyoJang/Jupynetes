@@ -61,7 +61,7 @@ export class ServerObject {
     } else if (diffDays < 1) {
       return diffHrs + ' 시간';
     } else {
-      return diffDays + ' 일';
+      return diffDays + '일';
     }
   }
 

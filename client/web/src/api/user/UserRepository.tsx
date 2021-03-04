@@ -1,4 +1,5 @@
 import { plainToClass } from 'class-transformer';
+import { assert } from 'console';
 import { client } from '../../App';
 import { UserInfo } from '../../model/UserInfo';
 const axios = require('axios').default;
@@ -18,14 +19,43 @@ export class UserRepository {
   }
 
   async getUser() {
-    let result: string = await this.provider.getUser();
-    let json = JSON.parse(result);
-    let users = plainToClass(UserInfo, json);
-    return users;
+    axios.defaults.withCredentials = true;
+    var response;
+    try {
+      response = await client.get('/user', {
+        withCredentials: true,
+        headers: { crossDomain: true, 'Content-Type': 'application/json' },
+      });
+    } catch (_) {
+      return;
+    }
+
+    let userInfo = plainToClass(UserInfo, response.data);
+    return userInfo;
   }
 
-  async postUser(password: string, newPasswrod: string) {
-    return true;
+  async postUser(password: string, newPassword: string) {
+    axios.defaults.withCredentials = true;
+    var response;
+    console.log('id ; ' + password);
+    console.log('password ; ' + newPassword);
+    try {
+      response = await client.post(
+        '/user',
+        {
+          password: password,
+          new_password: newPassword,
+        },
+        {
+          withCredentials: true,
+          headers: { crossDomain: true, 'Content-Type': 'application/json' },
+        },
+      );
+    } catch (_) {
+      return;
+    }
+
+    return response;
   }
 
   async postLogin(id: string, password: string) {
@@ -46,6 +76,7 @@ export class UserRepository {
         },
       );
     } catch (_) {
+      alert('가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.');
       return;
     }
 
@@ -53,6 +84,18 @@ export class UserRepository {
   }
 
   async getLogout() {
+    axios.defaults.withCredentials = true;
+    var response;
+    try {
+      response = await client.get('/logout', {
+        withCredentials: true,
+        headers: { crossDomain: true, 'Content-Type': 'application/json' },
+      });
+    } catch (_) {
+      alert('로그아웃에 실패했습니다.');
+      return;
+    }
+
     return true;
   }
 }

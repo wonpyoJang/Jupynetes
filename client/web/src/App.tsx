@@ -32,9 +32,10 @@ const App: FC = () => (
         <Route path="/login">
           <Login></Login>
         </Route>
-        <Route path="/dashboard">
-          <Dashboard></Dashboard>
-        </Route>
+        <Route
+          path="/dashboard"
+          render={(props) => <Dashboard {...props}></Dashboard>}
+        />
         <Redirect from="/" to="/login" />
       </Switch>
     </Router>

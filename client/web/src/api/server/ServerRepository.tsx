@@ -26,7 +26,7 @@ export class ServerRepository {
   async postServer(serverObject: any) {
     let result = await this.provider.postServer(serverObject);
     if (result === undefined) {
-      alert('post server failed');
+      alert('인스턴스 생성에 실패했습니다.');
       return;
     } else {
       let server = plainToClass(ServerObject, result.data);
@@ -73,9 +73,7 @@ class ServerProvider {
         withCredentials: true,
         headers: { crossDomain: true, 'Content-Type': 'application/json' },
       });
-    } catch (_) {
-      alert(_);
-    }
+    } catch (_) {}
     if (response === undefined) {
     } else {
       alert(response.data);
