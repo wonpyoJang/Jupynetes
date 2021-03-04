@@ -5,8 +5,15 @@ import appState from '../../../AppState';
 import { ServerObject } from '../../../model/ServerObject';
 import InstanceContainer from '../Container/InstanceContainer';
 import { useObserver } from 'mobx-react';
+import CSS from 'csstype';
 
 const InstanceList: FC<Object> = () => {
+  const myInstacneTitle: CSS.Properties = {
+    fontSize: '30px',
+    fontWeight: 'normal',
+    lineHeight: '45px',
+  };
+
   return useObserver(() => {
     return (
       <>
@@ -24,11 +31,12 @@ const InstanceList: FC<Object> = () => {
             <CreateInstance></CreateInstance>
           </Col>
         </Row>
-        <Card title="내 인스턴스 목록">
+        <p style={myInstacneTitle}>내 인스턴스 목록</p>
+        <div className="ant-row">
           {appState.servers.map(function (item: any) {
             return <InstanceContainer serverData={item}></InstanceContainer>;
           })}
-        </Card>
+        </div>
       </>
     );
   });

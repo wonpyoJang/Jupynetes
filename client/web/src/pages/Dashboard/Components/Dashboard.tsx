@@ -1,42 +1,68 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import 'antd/dist/antd.css';
 import '../../../index.css';
 import './Dashboard.less';
 import ChangePassword from '../../ChangePassword/ChangePassword';
-import { Layout, Button, Row, Col } from 'antd';
+import { Layout, Button } from 'antd';
 import CSS from 'csstype';
 import { InstanceListContainer } from '../Container/InstanceListContainer';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+import { UserRepository } from '../../../api/user/UserRepository';
 
-const { Header, Footer } = Layout;
+const { Footer } = Layout;
 const mypageStyle: CSS.Properties = {
-  margin: '0 auto',
-  float: 'right',
+  margin: 'auto',
   marginRight: '5px',
+  width: '100%',
+  display: 'grid',
+  gridTemplateColumns: '1fr 15fr 1fr 1fr',
+  backgroundColor: 'rgba(149, 206, 237, 1)',
+  height: '50px',
 };
 
-const Dashboard = () => {
+const logoutButtonStyle: CSS.Properties = {
+  backgroundColor: 'rgba(255, 255, 255, 1)',
+  border: 'solid',
+  borderColor: 'rgba(78, 185, 242,1)',
+};
+
+const buttonArea: CSS.Properties = {
+  fontSize: '14px',
+  fontWeight: 'bold',
+  marginTop: 'auto',
+  marginBottom: 'auto',
+};
+
+const Dashboard = (props: any) => {
   const history = useHistory();
-  const handleOnClickLogout = useCallback(() => history.push('/login'), [
-    history,
-  ]);
+  const location: any = useLocation();
+  const handleOnClickLogout = useCallback(async () => {
+    let userRepository = new UserRepository();
+    let result = await userRepository.getLogout();
+    if (result === true) {
+      history.push('/login');
+    }
+  }, [history]);
+
+  console.log('wow');
+
+  console.log(location.state.userId);
 
   return (
     <>
-      <Layout className="layout">
-        <Header>
-          <div className="logo" />
-          <Row style={mypageStyle}>
-            <Col span={12}>
-              <ChangePassword></ChangePassword>
-            </Col>
-            <Col span={12}>
-              <Button danger onClick={handleOnClickLogout}>
-                로그아웃
-              </Button>
-            </Col>
-          </Row>
-        </Header>
+      <Layout>
+        <div style={mypageStyle}>
+          <div style={buttonArea}>{location.state.userId}</div>
+          <div style={buttonArea}></div>
+          <div style={buttonArea}>
+            <ChangePassword username={location.state.userId}></ChangePassword>
+          </div>
+          <div style={buttonArea}>
+            <Button style={logoutButtonStyle} onClick={handleOnClickLogout}>
+              로그아웃
+            </Button>
+          </div>
+        </div>
         <InstanceListContainer />
         <Footer style={{ textAlign: 'center' }}>
           Ant Design ©2018 Created by Ant UED

@@ -1,30 +1,50 @@
 import React, { CSSProperties, FC, useState } from 'react';
-import { Card, Row, Col, Button } from 'antd';
+import { Card, Row, Col, Button, Popover } from 'antd';
 import { ServerObject, ServerStatus } from '../../../model/ServerObject';
 import './Instance.css';
 import appState from '../../../AppState';
 import { useObserver } from 'mobx-react';
 import { useHistory } from 'react-router';
-import { Link } from 'react-router-dom';
 import { ServerRepository } from '../../../api/server/ServerRepository';
+import Icon, { InfoCircleOutlined } from '@ant-design/icons';
 
 const gridStyle: CSSProperties = {
-  backgroundColor: 'yellow',
-  width: '33%',
+  backgroundColor: 'rgba(230, 230, 200, 1)',
   textAlign: 'center',
+  margin: '10px 10px 10px 10px',
+  borderRadius: '50px',
+  border: 'solid',
+  borderColor: 'rgba(230, 230, 200, 1)',
 };
 
-const infoStyle: CSSProperties = {
-  textAlign: 'left',
-  margin: '50px',
+const SelectedGridStyle: CSSProperties = {
+  backgroundColor: 'rgba(230, 230, 200, 1)',
+  textAlign: 'center',
+  margin: '10px 10px 10px 10px',
+  borderRadius: '50px',
+  border: 'solid',
+  borderColor: 'rgba(20, 230, 200, 1)',
 };
 
 const infoBodyStyle: CSSProperties = {
-  backgroundColor: 'rgba(255, 0, 0, 1)',
+  backgroundColor: 'rgba(230, 230, 200, 1)',
+  borderColor: 'rgba(120, 70, 70, 1)',
+  border: 'solid',
+  borderRadius: '15px',
+  textAlign: 'left',
+  padding: '10px 10px 10px 10px',
+  margin: '0 0 20px 0',
 };
 
-const infoBodyStyleSelected: CSSProperties = {
-  backgroundColor: 'rgba(0, 100, 0, 1)',
+const infoUnit: CSSProperties = {
+  fontSize: '14px',
+  fontWeight: 'bold',
+};
+
+const instanceTitleStyle: CSSProperties = {
+  fontSize: '25px',
+  fontWeight: 'normal',
+  lineHeight: '45px',
 };
 
 const style: CSSProperties = { background: '#0092ff', padding: '8px 0' };
@@ -89,57 +109,88 @@ const Instance: FC<InstanceProps> = (props) => {
 
     const index = appState.servers.indexOf(props.serverData);
 
+    const serverData = props.serverData;
+
+    const text = <span>Title</span>;
+    const cpuUnitInfo = (
+      <div>
+        <p>cpu size in micro cores (mcore), 1000mcore = 1core</p>
+      </div>
+    );
+
+    const memUnitInfo = (
+      <div>
+        <p>memory size in MiB, 1024MiB = 1GiB</p>
+      </div>
+    );
+
     return (
       <div
+        className="ant-col ant-col-xs-24 ant-col-xl-8"
         onClick={() => {
-          appState.togleSelect(props.serverData);
-          setIsSelected(props.serverData.isSelected);
+          appState.togleSelect(serverData);
+          setIsSelected(serverData.isSelected);
         }}
       >
-        <Card.Grid style={gridStyle}>
-          <Card title={props.serverData.name}>
-            <Card
-              extra={<a>정보수정</a>}
-              style={infoStyle}
-              bodyStyle={isSelected ? infoBodyStyleSelected : infoBodyStyle}
-            >
-              <p>{props.serverData.getFormmatedCreatedAt()} 에 생성 됨</p>
-              <p>{props.serverData.getNDaysAgo()} 째 구동중 </p>
-              <p>각종 잡다한 세부정보</p>
-              <p>구동중인 이미지</p>
-            </Card>
-            <Row gutter={16}>
-              <Col className="gutter-row" span={6}>
-                <div style={style}>
-                  <span
-                    className={renderInstanceStatus(
-                      props.serverData.getStatus(),
-                    )}
-                  ></span>
-                </div>
-              </Col>
-              <Col className="gutter-row" span={6}>
-                <div style={style}>
-                  <Button onClick={onClickDeleteServerHandler} danger>
-                    삭제
-                  </Button>
-                </div>
-              </Col>
-              {/* <Col className="gutter-row" span={6}>
-                <div style={style}>
-                  <Button danger>재시작</Button>
-                </div>
-              </Col> */}
-              <Col className="gutter-row" span={6}>
-                <div style={style}>
-                  <Button danger onClick={onClickAcessToServerHandler}>
-                    접속
-                  </Button>
-                </div>
-              </Col>
+        <Card
+          title={serverData.name}
+          headStyle={instanceTitleStyle}
+          style={isSelected ? SelectedGridStyle : gridStyle}
+        >
+          <div style={infoBodyStyle}>
+            <Row>
+              <p>{serverData.getFormmatedCreatedAt()}</p>
+              <p style={infoUnit}> &nbsp;에 생성 됨</p>
             </Row>
-          </Card>
-        </Card.Grid>
+            <Row>
+              <p>{serverData.getNDaysAgo()}</p>
+              <p style={infoUnit}> &nbsp;째 구동중 </p>
+            </Row>
+            <Row>
+              <p>{serverData.flavor.cpu}</p>
+              <p style={infoUnit}> &nbsp;microCore</p>
+              <Popover
+                placement="rightBottom"
+                content={cpuUnitInfo}
+                trigger="click"
+              >
+                <InfoCircleOutlined />
+              </Popover>
+            </Row>
+            <Row>
+              <p>{serverData.flavor.memory}</p>
+              <p style={infoUnit}> &nbsp;MiB</p>
+              <Popover
+                placement="rightBottom"
+                content={memUnitInfo}
+                trigger="click"
+              >
+                <InfoCircleOutlined />
+              </Popover>
+            </Row>
+            <Row>
+              <p>{serverData.flavor.nvidia_gpu} </p>
+              <p style={infoUnit}> &nbsp;gpu_unit</p>
+            </Row>
+          </div>
+          <Row gutter={16}>
+            <Col className="gutter-row" span={6}>
+              <span
+                className={renderInstanceStatus(props.serverData.getStatus())}
+              ></span>
+            </Col>
+            <Col className="gutter-row" span={10}></Col>
+            <Col className="gutter-row" span={2}>
+              <Button onClick={onClickDeleteServerHandler} danger>
+                삭제
+              </Button>
+            </Col>
+            <Col className="gutter-row" span={1}></Col>
+            <Col className="gutter-row" span={2}>
+              <Button onClick={onClickAcessToServerHandler}>접속</Button>
+            </Col>
+          </Row>
+        </Card>
       </div>
     );
   });
