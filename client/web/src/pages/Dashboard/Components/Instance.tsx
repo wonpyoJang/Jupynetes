@@ -152,7 +152,7 @@ const Instance: FC<InstanceProps> = (props) => {
               <Popover
                 placement="rightBottom"
                 content={cpuUnitInfo}
-                trigger="click"
+                trigger="hover"
               >
                 <InfoCircleOutlined />
               </Popover>
@@ -163,7 +163,7 @@ const Instance: FC<InstanceProps> = (props) => {
               <Popover
                 placement="rightBottom"
                 content={memUnitInfo}
-                trigger="click"
+                trigger="hover"
               >
                 <InfoCircleOutlined />
               </Popover>
