@@ -71,6 +71,21 @@ const CreateInstance = () => {
   };
 
   const handleOk = async () => {
+    if (allocatedCPU > 512) {
+      alert('최대 CPU는 512 micro core 이하입니다.');
+      return;
+    }
+
+    if (allocatedMem > 512) {
+      alert('최대 메모리는 512 MiB 이하입니다.');
+      return;
+    }
+
+    if (allocatedGpu > 512) {
+      alert('최대 GPU는 2 unit 이하입니다.');
+      return;
+    }
+
     let newServerObject = {
       name: serverName,
       description: serverDesc,
@@ -114,7 +129,7 @@ const CreateInstance = () => {
   return (
     <>
       <Button danger style={mypageStyle} onClick={showModal}>
-        인스턴스생성
+        인스턴스생성+
       </Button>
       <Modal
         title="인스턴스 생성"
