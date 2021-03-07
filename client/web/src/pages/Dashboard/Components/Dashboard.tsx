@@ -64,9 +64,7 @@ const Dashboard = (props: any) => {
           </div>
         </div>
         <InstanceListContainer />
-        <Footer style={{ textAlign: 'center' }}>
-          Ant Design ©2018 Created by Ant UED
-        </Footer>
+        <Footer style={{ textAlign: 'center' }}>Jupynetes ©2021</Footer>
       </Layout>
     </>
   );

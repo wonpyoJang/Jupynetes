@@ -1,42 +1,109 @@
 /* @import '~antd/dist/antd.less'; */
 
+.loginScreen {
+  border-width: 1px;
+  box-shadow: 5px 5px 15px rgba(230, 230, 230, 1);
+  width: 280px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+}
+
+.title {
+  position: relative;
+  width: 280px;
+  height: 70px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: rgb(38, 184, 184);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+}
+
+.footer {
+  position: relative;
+  width: 280px;
+  height: 60px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 0px;
+  background-color: rgba(230, 220, 220, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+}
+
+.footerText {
+  font-size: 12px;
+}
+
+.titleText {
+  position: absolute;
+  height: 30px;
+  font-size: 15px;
+  font-weight: bold;
+  margin: 0 auto;
+}
+
 .loginForm {
-  width: 30rem;
-  height: 400px;
+  width: 280px;
+  height: 220px;
   text-align: center;
   vertical-align: middle;
-  border-radius: 5%;
   padding-top: 20px;
-  border-width: 10px;
-  border: solid;
-  background-color: rgba(150, 150, 150, 1);
+  background-color: white;
   border-color: rgba(100, 100, 100, 1);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .userNameForm {
   text-align: center;
-  width: 29.6rem;
   vertical-align: middle;
   margin-top: 15px;
+  margin-left: 16px;
+  margin-right: 16px;
+  border-radius: 12px;
+  margin-bottom: 15px;
 }
 
 .userNameInput {
-  width: 29.6rem;
-  height: 3rem;
   vertical-align: middle;
+  border-radius: 15px;
+  height: 36px;
+  background-color: rgba(230, 230, 220, 1);
 }
 
 .passwordForm {
-  margin-top: 10px;
   text-align: center;
-  width: 29.6rem;
   vertical-align: middle;
+  margin-left: 16px;
+  margin-right: 16px;
+  border-radius: 12px;
+  margin-bottom: 0px;
 }
 
 .passwordInput {
-  width: 29.6rem;
-  height: 3rem;
   vertical-align: middle;
+  border-radius: 15px;
+  height: 36px;
+  background-color: rgba(230, 230, 220, 1);
+  margin-bottom: 0px;
+}
+
+.passwordInput > #basic_password {
+  background-color: rgba(230, 230, 220, 1);
+  margin-bottom: 0px;
 }
 
 .remeberMe {
@@ -47,25 +114,20 @@
 }
 
 .submitButtonArea {
-  margin-top: 25px;
-  padding-left: 0px;
-  margin-left: 0px;
+  margin-top: 15px;
+  margin-right: 16px;
+  margin-left: 16px;
 }
 
 .submitButton {
-  background: rgba(0, 0, 0, 1);
-  border-color: rgba(0, 0, 0, 1);
-  text-align: left;
-  width: 29.6rem;
-  height: 4rem;
-  margin-left: 0;
-  padding-left: 0;
-  padding-top: 10px;
-  margin: 0 0 0 0;
+  background-color: rgba(250, 100, 100, 1);
   text-align: center;
-  font-size: 1.7rem;
-  font-family: fantasy;
+  border-radius: 18px;
+  height: 36px;
+  text-align: center;
   font-weight: 900;
+  border-width: 0px;
+  width: 244px;
 }
 
 .title {

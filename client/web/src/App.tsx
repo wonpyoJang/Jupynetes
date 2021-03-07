@@ -9,7 +9,11 @@ import axios from 'axios';
 
 const hist = createBrowserHistory();
 
+const baseDomain = 'https://jupy.iwanhae.kr/v1';
+const baseURL = `${baseDomain}`;
+
 export const client = axios.create({
+  baseURL,
   withCredentials: true,
   timeout: 1000,
   headers: { 'X-Custom-Header': 'foobar' },
