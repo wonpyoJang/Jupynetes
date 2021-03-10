@@ -29,23 +29,12 @@ const LoginForm = (props: any) => {
 
   const onFinish = async (values: any) => {
     setIsLoading(true);
-    console.log('Success:', values);
-
     let repository = new UserRepository();
-    console.log('userId: ' + userId);
-    console.log('password: ' + password);
     let response = await repository.postLogin(userId, password);
     if (response === undefined) {
+      setIsLoading(false);
+      return;
     } else {
-      let userInfo = await repository.getUser();
-      if (userInfo !== undefined) {
-      } else {
-        alert('로그인에 실패했습니다.');
-        setIsLoading(false);
-        return;
-      }
-      console.log('hey');
-      console.log(userInfo);
       history.push({
         pathname: '/dashboard',
         state: { userId: userId },

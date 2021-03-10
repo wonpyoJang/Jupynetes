@@ -1,6 +1,7 @@
 import { plainToClass } from 'class-transformer';
 import { ServerResponse } from 'http';
 import { client } from '../../App';
+import Tools from '../../common/tools';
 import { ServerObject } from '../../model/ServerObject';
 
 const isTest = false;
@@ -57,8 +58,8 @@ class ServerProvider {
         withCredentials: true,
         headers: { crossDomain: true, 'Content-Type': 'application/json' },
       });
-    } catch (_) {
-      alert(_);
+    } catch (error) {
+      Tools.showErrorAlert('서버 정보 획득에 실패했습니다.', error);
       return;
     }
     return response;
@@ -73,10 +74,8 @@ class ServerProvider {
         withCredentials: true,
         headers: { crossDomain: true, 'Content-Type': 'application/json' },
       });
-    } catch (_) {}
-    if (response === undefined) {
-    } else {
-      alert(response.data);
+    } catch (error) {
+      Tools.showErrorAlert('서버 생성에 실패했습니다', error);
     }
 
     return response;
@@ -91,8 +90,8 @@ class ServerProvider {
         withCredentials: true,
         headers: { crossDomain: true, 'Content-Type': 'application/json' },
       });
-    } catch (_) {
-      alert('삭제에 실패했습니다.');
+    } catch (error) {
+      Tools.showErrorAlert('삭제에 실패했습니다.', error);
       return false;
     }
     return true;

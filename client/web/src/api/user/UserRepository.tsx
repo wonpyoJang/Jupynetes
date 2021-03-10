@@ -1,6 +1,7 @@
 import { plainToClass } from 'class-transformer';
 import { assert } from 'console';
 import { client } from '../../App';
+import Tools from '../../common/tools';
 import { UserInfo } from '../../model/UserInfo';
 const axios = require('axios').default;
 
@@ -26,7 +27,8 @@ export class UserRepository {
         withCredentials: true,
         headers: { crossDomain: true, 'Content-Type': 'application/json' },
       });
-    } catch (_) {
+    } catch (error) {
+      Tools.showErrorAlert('유저정보 로딩에 실패했습니다', error);
       return;
     }
 
@@ -51,7 +53,8 @@ export class UserRepository {
           headers: { crossDomain: true, 'Content-Type': 'application/json' },
         },
       );
-    } catch (_) {
+    } catch (error) {
+      Tools.showErrorAlert('비밀번호 변경에 실패했습니다.', error);
       return;
     }
 
@@ -75,8 +78,12 @@ export class UserRepository {
           headers: { crossDomain: true, 'Content-Type': 'application/json' },
         },
       );
-    } catch (_) {
-      alert('가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.');
+    } catch (error) {
+      alert(
+        '가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.\n\n' +
+          '[에러코드]\n' +
+          error,
+      );
       return;
     }
 
@@ -91,8 +98,8 @@ export class UserRepository {
         withCredentials: true,
         headers: { crossDomain: true, 'Content-Type': 'application/json' },
       });
-    } catch (_) {
-      alert('로그아웃에 실패했습니다.');
+    } catch (error) {
+      Tools.showErrorAlert('로그아웃에 실패했습니다.', error);
       return;
     }
 

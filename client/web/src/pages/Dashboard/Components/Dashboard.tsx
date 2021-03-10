@@ -44,10 +44,6 @@ const Dashboard = (props: any) => {
     }
   }, [history]);
 
-  console.log('wow');
-
-  console.log(location.state.userId);
-
   return (
     <>
       <Layout>
