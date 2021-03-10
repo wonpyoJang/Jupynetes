@@ -67,18 +67,24 @@ const ChangePassword = (props: any) => {
   };
 
   const handleOk = () => {
-    console.log('newPasswrd: ' + newPassword);
-    console.log('newPasswordConfirm: ' + newPasswordConfirm);
     if (newPassword !== newPasswordConfirm) {
       alert('새 패스워드와 새 패스워드 확인이 일치하지 않습니다.');
       return;
     }
 
-    let userRepository = new UserRepository();
+    if (newPassword === props.username) {
+      alert('아이디와 패스워드는 일치할 수 없습니다.');
+      return;
+    }
 
+    if (newPassword === currentPassword) {
+      alert('새 패스워드는 기존 패스워드와 같을 수 없습니다.');
+      return;
+    }
+
+    let userRepository = new UserRepository();
     let result = userRepository.postUser(currentPassword, newPassword);
 
-    setModalText('The modal will be closed after two seconds');
     setConfirmLoading(true);
     setTimeout(() => {
       setVisible(false);
@@ -135,7 +141,7 @@ const ChangePassword = (props: any) => {
             rules={[
               {
                 required: true,
-                message: 'Please input your password!',
+                message: '기존 비밀번호를 입력해 주세요!',
               },
             ]}
           >
@@ -147,8 +153,30 @@ const ChangePassword = (props: any) => {
             rules={[
               {
                 required: true,
-                message: 'Please input your password!',
+                message: '변경할 비밀번호를 입력해 주세요.',
               },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('passwordOriginal') !== value) {
+                    return Promise.resolve();
+                  }
+
+                  return Promise.reject(
+                    new Error('기존 비밀번호는 사용할 수 없습니다.'),
+                  );
+                },
+              }),
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || props.username !== value) {
+                    return Promise.resolve();
+                  }
+
+                  return Promise.reject(
+                    new Error('아이디와 비밀번호는 동일할 수 없습니다.'),
+                  );
+                },
+              }),
             ]}
           >
             <Input.Password onChange={changeNewPasswordHandler} />
@@ -159,8 +187,17 @@ const ChangePassword = (props: any) => {
             rules={[
               {
                 required: true,
-                message: 'Please input your password!',
+                message: '일치하지 않습니다.',
               },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('passwordNew') === value) {
+                    return Promise.resolve();
+                  }
+
+                  return Promise.reject(new Error('일치하지 않습니다.'));
+                },
+              }),
             ]}
           >
             <Input.Password onChange={changeNewPasswordConfirmHandler} />
